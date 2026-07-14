@@ -1,0 +1,102 @@
+# ======================
+# Tickets Hunter 專案專用 .gitignore
+# ======================
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# === Virtual Environment ===
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# === Environment variables & Secrets ===
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets.json
+config_secret.py
+accounts.json
+member_codes.txt
+proxies.txt
+cookies.json
+session/
+
+# === Logs & Temporary files ===
+*.log
+logs/
+*.log.*
+temp/
+tmp/
+
+# === Browser / Automation ===
+chromedriver*
+geckodriver*
+nodriver/
+browser_data/
+user_data/
+Default/
+Session Storage/
+Cookies
+Login Data
+
+# === Chrome Extension ===
+node_modules/
+dist/
+build/
+*.crx
+*.zip
+extension/.DS_Store
+
+# === OS generated files ===
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === IDE / Editor ===
+.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# === Other ===
+*.bak
+*.tmp
+*.temp
+__pycache__/
