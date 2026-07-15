@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "全能搶票機器人 (KKTIX + TicketPlus + KHAM)",
+  "version": "9.1",
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.kktix.cc/*",
+    "*://kktix.com/*",
+    "*://*.ticketplus.com.tw/*",
+    "*://*.kham.com.tw/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "options.html"
+  },
+  "commands": {
+    "toggle-bot": {
+      "suggested_key": {
+        "default": "Ctrl+B",
+        "mac": "Alt+B"
+      },
+      "description": "啟動/停止機器人"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.kktix.cc/*", "*://kktix.com/*"],
+      "js": ["kktix_content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.ticketplus.com.tw/*"],
+      "js": ["ticketplus_content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.kham.com.tw/*"],
+      "js": ["kham_content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["*://*.kktix.cc/*", "*://kktix.com/*"]
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>KKTIX 搶票設定</title>
+    <style>
+        :root { --primary: #2196F3; --bg: #fff; }
+        body { font-family: "Microsoft JhengHei", sans-serif; background: var(--bg); padding: 20px; width: 400px; font-size: 14px;}
+        
+        .form-row { display: flex; align-items: center; margin-bottom: 12px; }
+        .form-label { width: 100px; text-align: right; margin-right: 10px; font-weight: bold; color: #555; }
+        .form-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .checkbox-row { margin-left: 110px; margin-bottom: 8px; display: flex; align-items: center; }
+        .checkbox-row input { margin-right: 8px; }
+        
+        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 15px; font-weight: bold;}
+        button:hover { background: #1976D2; }
+        
+        #status { text-align: center; margin-top: 10px; color: green; font-weight: bold; min-height: 20px;}
+        
+        /* 手動選位範圍設定區塊 */
+        .manual-settings { border-top: 1px dashed #ccc; margin-top: 15px; padding-top: 10px; display: none; }
+        .manual-settings.show { display: block; }
+        .range-inputs { display: flex; gap: 5px; align-items: center; }
+        .range-inputs input { width: 60px; text-align: center; }
+        .sub-label { font-size: 12px; color: #777; margin-left: 110px; margin-bottom: 5px; }
+
+        /* ===== 新增：排數增減按鈕的專用樣式 ===== */
+        .row-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            margin-right: 5px;
+        }
+        .row-step-btn {
+            width: 18px !important;
+            height: 14px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            font-size: 8px !important;
+            line-height: 12px !important;
+            background: #f1f1f1 !important;
+            color: #333 !important;
+            border: 1px solid #ccc !important;
+            border-radius: 2px !important;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .row-step-btn:hover {
+            background: #e0e0e0 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-row">
+        <label class="form-label">票價關鍵字:</label>
+        <input type="text" id="price_keyword" class="form-input" placeholder="例如 : 3000">
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">票種關鍵字:</label>
+        <input type="text" id="type_keyword" class="form-input" placeholder="例如 : VIP">
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">票價搜尋順序:</label>
+        <select id="search_direction" class="form-input">
+            <option value="top_down">由上至下</option>
+            <option value="bottom_up">由下至上</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">張數:</label>
+        <input type="number" id="ticket_count" class="form-input" value="1" min="1" max="4" placeholder="例如 : 2">
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">會員編號:</label>
+        <input type="text" id="member_id" class="form-input" placeholder="若有福利加購請填寫">
+    </div>
+
+    <div class="checkbox-row">
+        <input type="checkbox" id="auto_refresh">
+        <label for="auto_refresh">沒有符合票種時自動重新整理</label>
+    </div>
+
+    <div class="checkbox-row">
+        <input type="checkbox" id="force_submit">
+        <label for="force_submit">找不到票時也嘗試點下一步/選位</label>
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">選位模式:</label>
+        <select id="seat_mode" class="form-input">
+            <option value="computer">電腦配位 / 下一步</option>
+            <option value="manual">自行選位 (手動/自動點圖)</option>
+        </select>
+    </div>
+
+    <div id="manual_options" class="manual-settings">
+        <div class="sub-label">▼ 自行選位模式進階設定 (進入選位圖後)<br>
+        <span style="color:#d32f2f; font-size:13px;">※ 排數支援 1H、1A~1Z、V排、純數字 等格式</span>
+        </div>
+        <div class="checkbox-row">
+            <input type="checkbox" id="enable_seat_map_click">
+            <label for="enable_seat_map_click" style="color:blue;">啟用選位圖自動點擊</label>
+        </div>
+        
+        <!-- ===== 這裡修改了：幫排數輸入框增加了微調小三角形按鈕結構 ===== -->
+        <div class="form-row">
+            <label class="form-label">排數範圍:</label>
+            <div class="range-inputs">
+                <input type="text" id="row_min" placeholder="例如: 1H" class="form-input">
+                <div class="row-btn-group">
+                    <button class="row-step-btn" id="row_min_up" tabIndex="-1">▲</button>
+                    <button class="row-step-btn" id="row_min_down" tabIndex="-1">▼</button>
+                </div>
+                
+                <span>-</span>
+                
+                <input type="text" id="row_max" placeholder="例如: 1K" class="form-input">
+                <div class="row-btn-group">
+                    <button class="row-step-btn" id="row_max_up" tabIndex="-1">▲</button>
+                    <button class="row-step-btn" id="row_max_down" tabIndex="-1">▼</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <label class="form-label">號碼範圍:</label>
+            <div class="range-inputs">
+                <input type="number" id="num_min" placeholder="Min" class="form-input"> - <input type="number" id="num_max" placeholder="Max" class="form-input">
+            </div>
+        </div>
+    </div>
+
+    <button id="save">💾 儲存設定</button>
+    <div id="status"></div>
+
+    <script src="options.js"></script>
+</body>
+</html>
